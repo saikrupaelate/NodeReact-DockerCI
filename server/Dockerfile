@@ -19,4 +19,5 @@ COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 5000
 
-CMD ["node", "index.js"]
+COPY wait-for-db.sh .
+CMD ["./wait-for-db.sh", "node", "index.js"]
