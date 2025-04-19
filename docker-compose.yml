@@ -1,27 +1,30 @@
 version: '3.8'
 services:
-  backend:
-    image: saikrupaelate/backend
+  server:
+    image: saikrupaelate/server
+    build: ./server
     ports:
       - "5000:5000"
     depends_on:
-      - db
+      - mysql
 
   frontend:
     image: saikrupaelate/frontend
+    build: ./frontend
     ports:
       - "3000:3000"
     depends_on:
-      - backend
+      - server
 
-  db:
-    image: postgres
+  mysql:
+    image: mysql
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: devopsdb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: devdb
     volumes:
-      - db_data:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
   prometheus:
     image: prom/prometheus
