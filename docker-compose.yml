@@ -9,6 +9,8 @@ services:
       - mysql
     env_file:
       - ./server/.env
+    entrypoint: ["sh", "wait-for-db.sh"]
+    command: ["node", "index.js"]
 
   frontend:
     image: saikrupaelate/frontend
