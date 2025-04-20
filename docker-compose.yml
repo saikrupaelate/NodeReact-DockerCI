@@ -33,21 +33,20 @@ services:
       MYSQL_DATABASE: devdb
       MYSQL_USER: devuser
       MYSQL_PASSWORD: devpass
-      MYSQL_INITDB_SKIP_TZABLE: 1  # Add this to skip timezone tables
+      MYSQL_INITDB_SKIP_TZABLE: 1
     volumes:
-      - ./mysql_data:/var/lib/mysql  # Use local folder instead of named volume
+      - ./mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      interval: 5s
-      timeout: 10s
-      retries: 20
     command: 
       - --default-authentication-plugin=mysql_native_password
-      - --performance_schema=OFF  # Disable problematic performance schema
+      - --performance_schema=OFF
       - --skip-name-resolve
-
+      - --innodb_use_native_aio=0  # Disable async IO
+      - --innodb_buffer_pool_size=64M  # Reduce buffer pool
+      - --innodb_log_file_size=48M  # Reduce log size
+      - --innodb_log_buffer_size=8M  # Reduce log buffer
+      
   prometheus:
     image: prom/prometheus
     volumes:

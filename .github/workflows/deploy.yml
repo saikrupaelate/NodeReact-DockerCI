@@ -72,9 +72,11 @@ jobs:
 
           echo "Starting containers..."
           cd ~/NodeReact-DockerCI
-          docker-compose down || true
-          # Create the data directory
-          mkdir -p mysql_data
-          chmod 777 mysql_data  # Ensure Docker can write to it
-          # Rebuild and start the containers
-          docker-compose up -d --build --force-recreate
+          # Remove old data
+          sudo rm -rf mysql_data
+          mkdir mysql_data
+          chmod 777 mysql_data
+
+          # Rebuild and start
+          docker-compose down -v
+          docker-compose up --build
