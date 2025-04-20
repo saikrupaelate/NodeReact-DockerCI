@@ -20,4 +20,6 @@ COPY --from=builder /app/node_modules ./node_modules
 EXPOSE 5000
 
 COPY wait-for-db.sh .
+RUN chmod +x wait-for-db.sh  # Add this line to make the script executable
+
 CMD ["./wait-for-db.sh", "node", "index.js"]
