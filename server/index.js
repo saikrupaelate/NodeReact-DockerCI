@@ -5,7 +5,7 @@ const app = express();
 const router = require('./routes/DBOperRoutes');
 const bodyParser = require('body-parser');
 const cors = require("cors");
-const client = require('prom-client');
+// const client = require('prom-client');
 
 dotenv.config();
 
@@ -18,13 +18,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Prometheus metrics setup
-const collectDefaultMetrics = client.collectDefaultMetrics;
-collectDefaultMetrics();
+// const collectDefaultMetrics = client.collectDefaultMetrics;
+// collectDefaultMetrics();
 
-app.get("/metrics", async (req, res) => {
-  res.set("Content-Type", client.register.contentType);
-  res.end(await client.register.metrics());
-});
+// app.get("/metrics", async (req, res) => {
+//   res.set("Content-Type", client.register.contentType);
+//   res.end(await client.register.metrics());
+// });
 
 let pool;
 
