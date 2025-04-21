@@ -42,4 +42,8 @@ let pool;
     app.listen(port, () => {
         console.log(`Backend listening on port http://localhost:${port}`);
     });
+
+    app.get('/', (req, res) => {
+        res.json({ message: "Hello from the backend!" });
+    });    
 })();
