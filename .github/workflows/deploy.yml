@@ -47,7 +47,7 @@ jobs:
           docker container stop $(docker ps -aq) || true
           docker container rm $(docker ps -aq) || true
           docker rmi -f $(docker images -aq) || true
-          docker volume rm $(docker volume ls -q) || true
+          docker volume prune -f || true
           docker network prune -f || true
           
           echo ">>> Remove old app folder..."
