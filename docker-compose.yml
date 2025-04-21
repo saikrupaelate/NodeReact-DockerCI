@@ -1,31 +1,5 @@
 version: '3.8'
 services:
-  server:
-    image: saikrupaelate/server
-    build: ./server
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mysql
-    environment:
-      DB_HOST: mysql  # This should match the MySQL service name
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_DATABASE: devdb
-    env_file:
-      - ./server/.env
-    entrypoint: ["sh", "wait-for-db.sh"]
-    command: ["node", "index.js"]
-
-  frontend:
-    image: saikrupaelate/frontend
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - server
-
   mysql:
     image: mysql:5.7
     environment:
@@ -35,18 +9,56 @@ services:
       MYSQL_PASSWORD: devpass
       MYSQL_INITDB_SKIP_TZABLE: 1
     volumes:
-      - ./mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
     command: 
       - --default-authentication-plugin=mysql_native_password
       - --performance_schema=OFF
       - --skip-name-resolve
-      - --innodb_use_native_aio=0  # Disable async IO
-      - --innodb_buffer_pool_size=64M  # Reduce buffer pool
-      - --innodb_log_file_size=48M  # Reduce log size
-      - --innodb_log_buffer_size=8M  # Reduce log buffer
-      
+      - --innodb_use_native_aio=0
+      - --innodb_buffer_pool_size=32M
+      - --innodb_log_file_size=24M
+      - --innodb_log_buffer_size=4M
+      - --skip-innodb_doublewrite
+      - --innodb_flush_log_at_trx_commit=2
+
+  server:
+    image: saikrupaelate/server
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_DATABASE: devdb
+    env_file:
+      - ./server/.env
+    entrypoint: ["sh", "wait-for-db.sh"]
+    command: ["node", "index.js"]
+  
+  frontend:
+    image: saikrupaelate/frontend
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://server:5000
+    depends_on:
+      - server
+
   prometheus:
     image: prom/prometheus
     volumes:

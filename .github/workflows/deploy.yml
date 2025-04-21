@@ -37,30 +37,20 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_KEY }}
         script: |
-          echo "Stopping containers..."
-          docker-compose -f ~/DevStack-Lite/docker-compose.yml down || true
-          docker-compose -f ~/NodeReact-DockerCI/docker-compose.yml down || true
+          echo ">>> Freeing disk space..."
+          sudo apt-get clean
+          sudo journalctl --vacuum-size=50M
+          docker system prune -a -f --volumes
+          
+          echo ">>> Stopping and cleaning old containers..."
+          docker-compose -f ~/NodeReact-DockerCI/docker-compose.yml down -v || true
           docker container stop $(docker ps -aq) || true
           docker container rm $(docker ps -aq) || true
-          
-          echo ">>> Remove all images..."
           docker rmi -f $(docker images -aq) || true
-
-          echo ">>> Remove all volumes..."
           docker volume rm $(docker volume ls -q) || true
-
-          echo ">>> Remove all networks (except default)..."
           docker network prune -f || true
           
-          echo "Pruning images..."
-          docker image prune -a -f || true
-          docker volume prune -f || true
-
-          echo ">>> Prune system (builder cache, etc)..."
-          docker system prune -a -f --volumes || true
-
-          echo ">>> Remove any old app folders..."
-          rm -rf ~/DevStack-Lite || true 
+          echo ">>> Remove old app folder..."
           rm -rf ~/NodeReact-DockerCI || true
 
           echo "Cloning latest code..."
@@ -72,11 +62,4 @@ jobs:
 
           echo "Starting containers..."
           cd ~/NodeReact-DockerCI
-          # Remove old data
-          sudo rm -rf mysql_data
-          mkdir mysql_data
-          chmod 777 mysql_data
-
-          # Rebuild and start
-          docker-compose down -v
-          docker-compose up --build
+          docker-compose up --build -d
