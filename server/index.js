@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const ConnectDB = require('./db/ConnectDB');
 const app = express();
 const router = require('./routes/DBOperRoutes');
+const userRouter = require('./routes/userRoutes'); // Add this line
 const bodyParser = require('body-parser');
 const cors = require("cors");
 // const client = require('prom-client');
@@ -38,6 +39,7 @@ let pool;
     });
 
     app.use("/", router);
+    app.use("/", userRouter); // Add this line  
 
     app.listen(port, () => {
         console.log(`Backend listening on port http://localhost:${port}`);
