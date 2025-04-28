@@ -16,7 +16,8 @@ function Table() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+        const frontIP = process.env.FRONTEND_IP;
+        const response = await axios.get("http://"+frontIP+":"+process.env.FRONTEND_PORT+"/users");
         //setting the empty array as a json object of users got from the server
         setUsers(response.data);
 

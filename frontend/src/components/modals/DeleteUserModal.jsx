@@ -21,8 +21,9 @@ function DeleteUserModal() {
       return;
     }
     try {
+      const frontIP = process.env.FRONTEND_IP;
       //delete req to the server with data payload
-      const res = await axios.delete(`${import.meta.env.VITE_API_URL}/users/${id}`);
+      const res = await axios.delete("http://" +frontIP+ ":"+ process.env.FRONTEND_PORT+ "/users/${id}");
 
       //incase of success
       if (res.status === 200) {

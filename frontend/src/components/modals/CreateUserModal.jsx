@@ -29,7 +29,8 @@ function CreateUserModal({ addUser }) {
 
     try {
       //post req to server
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/users`, {
+      const frontIP = process.env.FRONTEND_IP;
+      const res = await axios.post("http://"+frontIP+":"+process.env.FRONTEND_PORT+"/", {
         name,
         email
       });
