@@ -30,7 +30,7 @@ function CreateUserModal({ addUser }) {
 
     try {
       //post req to server
-      const res = await axios.post("http://54.91.92.175:3000/", {
+      const res = await axios.post("http://localhost:3000/", {
         name,
         email
       });

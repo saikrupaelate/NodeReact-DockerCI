@@ -24,7 +24,7 @@ function DeleteUserModal() {
     try {
       const frontIP = process.env.FRONTEND_IP;
       //delete req to the server with data payload
-      const res = await axios.delete("http://54.91.92.175:3000/users/${id}");
+      const res = await axios.delete("http://localhost:3000/users/${id}");
 
       //incase of success
       if (res.status === 200) {
