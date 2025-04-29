@@ -35,7 +35,7 @@ function EditUserModal() {
     }
     try {
       //put req to server
-      const res = await axios.put(`${API_URL}/users/${id}`, {
+      const res = await axios.put("http://54.91.92.175:3000/users/${id}", {
         name,
         email
       });
