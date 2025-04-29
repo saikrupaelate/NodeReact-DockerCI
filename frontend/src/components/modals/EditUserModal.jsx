@@ -35,10 +35,7 @@ function EditUserModal() {
     }
     try {
       //put req to server
-      const res = await axios.put("http://localhost:3000/users/${id}", {
-        name,
-        email
-      });
+      const res = await axios.put(`${API_URL}/users/${id}`, { name, email });
 
       //incase of success
       if (res.status === 200) {

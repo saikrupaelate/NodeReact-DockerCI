@@ -30,10 +30,7 @@ function CreateUserModal({ addUser }) {
 
     try {
       //post req to server
-      const res = await axios.post("http://localhost:3000/", {
-        name,
-        email
-      });
+      const res = await axios.post(`${API_URL}/users`, { name, email });
 
       //incase of success
       if (res.status === 201) {
