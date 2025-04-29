@@ -2,10 +2,8 @@
 FROM node:18 AS builder
 
 WORKDIR /app
-    
 COPY package*.json ./
 RUN npm install
-
 COPY . .
     
 # -------- Stage 2: Runtime --------
@@ -17,12 +15,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
     
 WORKDIR /app
-    
 COPY --from=builder /app ./
 COPY --from=builder /app/node_modules ./node_modules
-    
 EXPOSE 5000
-    
 COPY wait-for-db.sh .
 RUN chmod +x wait-for-db.sh
     

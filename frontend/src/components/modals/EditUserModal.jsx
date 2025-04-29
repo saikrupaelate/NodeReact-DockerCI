@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 //starting of the functional component which edits the user in the database
 function EditUserModal() {
@@ -34,7 +35,7 @@ function EditUserModal() {
     }
     try {
       //put req to server
-      const res = await axios.put("http://"+frontIP+":"+process.env.FRONTEND_PORT, {
+      const res = await axios.put(`${API_URL}/users/${id}`, {
         name,
         email
       });

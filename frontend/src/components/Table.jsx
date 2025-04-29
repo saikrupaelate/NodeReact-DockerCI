@@ -5,6 +5,7 @@ import { Toaster, toast } from "sonner";
 import EditUserModal from "./modals/EditUserModal";
 import CreateUserModal from "./modals/CreateUserModal";
 import DeleteUserModal from "./modals/DeleteUserModal";
+const API_URL = import.meta.env.VITE_API_URL;
 
 //creation of the parent functional component which will be pased to app.jsx
 function Table() {
@@ -17,7 +18,7 @@ function Table() {
     const fetchUsers = async () => {
       try {
         const frontIP = process.env.FRONTEND_IP;
-        const response = await axios.get("http://"+frontIP+":"+process.env.FRONTEND_PORT+"/users");
+        const response = await axios.get(`${API_URL}/users`);
         //setting the empty array as a json object of users got from the server
         setUsers(response.data);
 

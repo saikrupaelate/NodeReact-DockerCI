@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+const API_URL = import.meta.env.VITE_API_URL;
 
 //starting of the functional component which will delete users
 function DeleteUserModal() {
@@ -23,7 +24,7 @@ function DeleteUserModal() {
     try {
       const frontIP = process.env.FRONTEND_IP;
       //delete req to the server with data payload
-      const res = await axios.delete("http://" +frontIP+ ":"+ process.env.FRONTEND_PORT+ "/users/${id}");
+      const res = await axios.delete(`${API_URL}/users/${id}`);
 
       //incase of success
       if (res.status === 200) {

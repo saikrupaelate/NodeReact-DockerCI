@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 //starting of the functional component which takes a argument inside for adding the user to the user aray for dynamic display witout any reload
 function CreateUserModal({ addUser }) {
@@ -29,8 +30,7 @@ function CreateUserModal({ addUser }) {
 
     try {
       //post req to server
-      const frontIP = process.env.FRONTEND_IP;
-      const res = await axios.post("http://"+frontIP+":"+process.env.FRONTEND_PORT+"/", {
+      const res = await axios.post(`${API_URL}/users`, {
         name,
         email
       });
