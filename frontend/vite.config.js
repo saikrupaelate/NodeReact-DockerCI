@@ -7,7 +7,7 @@ export default defineConfig({
     port: process.env.FRONTEND_PORT,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000', // For local development
+        target: 'http://54.91.92.175:5000', // For local development
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
