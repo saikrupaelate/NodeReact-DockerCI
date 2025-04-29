@@ -5,8 +5,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: devdb
-    volumes:
-      - mysql_data:/var/lib/mysql
+    # volumes:
+    #   - mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
     healthcheck:
@@ -36,14 +36,15 @@ services:
   frontend:
     build: 
       context: ./frontend
-      args:
-        - VITE_API_URL=http://3.80.40.101:5000
+      dockerfile: Dockerfile
+      # args:
+      #   - VITE_API_URL=http://3.80.40.101:5000
     ports:
       - "3000:3000"
-    environment:
-      - VITE_API_URL=http://3.80.40.101:5000
+    # environment:
+    #   - VITE_API_URL=http://3.80.40.101:5000
     depends_on:
       - server
 
-volumes:
-  mysql_data:  # This declares the named volume
+# volumes:
+#   mysql_data:  # This declares the named volume
