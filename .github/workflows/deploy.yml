@@ -49,6 +49,7 @@ jobs:
           docker rmi -f $(docker images -aq) || true
           docker volume prune -f || true
           docker network prune -f || true
+          docker compose down --volumes
           
           echo ">>> Remove old app folder..."
           rm -rf ~/NodeReact-DockerCI || true
@@ -62,4 +63,4 @@ jobs:
 
           echo "Starting containers..."
           cd ~/NodeReact-DockerCI
-          docker-compose up --build -d
+          docker compose up --build -d --no-cache
