@@ -49,7 +49,7 @@ jobs:
           docker rmi -f $(docker images -aq) || true
           docker volume prune -f || true
           docker network prune -f || true
-          docker compose down --volumes
+          docker system prune -f || true
           
           echo ">>> Remove old app folder..."
           rm -rf ~/NodeReact-DockerCI || true
@@ -61,6 +61,12 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/server:latest
           docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
+          echo ">>> Building containers (no cache)..."
+          cd ~/NodeReact-DockerCI
+          docker compose build --no-cache
+
           echo "Starting containers..."
           cd ~/NodeReact-DockerCI
-          docker compose up --build -d --no-cache
+          docker compose up -d
+
+          echo "✅ Deployment complete."
